@@ -1,4 +1,4 @@
-# Finding 1.5
+# How NCAA teams improved over time
 
 A Love Data Week 2026 data viz entry about how NCAA Division I women's basketball has
 converged on the break-even point between twos and threes (2P% ÷ 3P% = 1.5).
