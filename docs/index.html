@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>How NCAA teams improved from 2014-2026</title>
+  <meta name="description" content="How NCAA women's basketball priced the three-pointer correctly, 2014–2026.">
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
+  <script type="module" src="main.js"></script>
+</head>
+<body>
+  <header class="hero">
+    <p class="kicker">NCAA Division I women's basketball · 2014–2026</p>
+    <h1>How NCAA teams improved from 2014-2026</h1>
+    <p class="dek">A three-pointer is worth 1.5 twos. Over twelve seasons, the game has
+      settled on exactly that price.</p>
+    <p class="lede" id="hero-lede"></p>
+    <div class="stats" id="hero-stats"></div>
+  </header>
+
+  <main>
+    <section id="why">
+      <h2>Why 1.5?</h2>
+      <p>In basketball, there are two types of shots: twos and threes. A three counts for 3 points and a two for 2, so a three only has to go in
+        <b>two-thirds as often</b> to be worth the same. Divide a team's 2-point percentage by
+        its 3-point percentage: if the result is <b>below 1.5</b>, threes are the better shot.
+        <b>Above 1.5</b>, twos are. At exactly 1.5, it doesn't matter which one you take.</p>
+      <div class="card explainer">
+        <div class="sliders">
+          <label><span class="two">2-point %</span> <output id="p2-out"></output>
+            <input type="range" id="p2" min="0.35" max="0.60" step="0.005"></label>
+          <label><span class="three">3-point %</span> <output id="p3-out"></output>
+            <input type="range" id="p3" min="0.20" max="0.45" step="0.005"></label>
+        </div>
+        <div class="pps">
+          <div class="pps-row"><span>Points per 2-pt shot attempt</span><div class="bar-track"><div class="bar two-bg" id="pps2-bar"></div></div><b id="pps2"></b></div>
+          <div class="pps-row"><span>Points per 3-pt shot attempt</span><div class="bar-track"><div class="bar three-bg" id="pps3-bar"></div></div><b id="pps3"></b></div>
+        </div>
+        <p class="verdict" id="verdict"></p>
+      </div>
+    </section>
+
+    <section id="convergence">
+      <h2>The league walked to the line</h2>
+      <p>Each season's 2P% ÷ 3P% for all of Division I. In 2014 threes were clearly
+        underused; by 2026 the league sits almost exactly on 1.5. The season's ten best
+        teams by win percentage got there first.</p>
+      <div class="legend">
+        <span><i class="sw league-bg"></i>All D-I teams</span>
+        <span><i class="sw top-bg"></i>Top 10 teams by win %</span>
+        <span><i class="sw band-bg"></i>Middle 50% of teams</span>
+      </div>
+      <div class="chart" id="ratio-chart"></div>
+      <p>Measured in points per shot, the gap between the two shot types has
+        almost disappeared.</p>
+      <div class="legend">
+        <span><i class="sw two-bg"></i>Points per 2-pt attempt</span>
+        <span><i class="sw three-bg"></i>Points per 3-pt attempt</span>
+      </div>
+      <div class="chart" id="pps-chart"></div>
+    </section>
+
+    <section id="teams" class="wide">
+      <h2>Every team, every season</h2>
+      <p>Each dot is a team. Teams <b>below the line</b> got more points from threes than
+        from twos; teams <b>above</b> it got more from twos. Press play and watch the
+        whole group shift up onto the line.</p>
+      <div class="controls">
+        <button id="play" type="button" aria-label="Play seasons">▶ Play</button>
+        <input type="range" id="season" aria-label="Season">
+        <output id="season-out"></output>
+        <input type="search" id="team-search" list="team-names" placeholder="Find a team…" aria-label="Find a team">
+        <datalist id="team-names"></datalist>
+        <label class="check"><input type="checkbox" id="top10" checked> Ring the top 10</label>
+      </div>
+      <div class="chart" id="scatter"></div>
+      <p class="caption" id="scatter-caption"></p>
+    </section>
+
+    <section id="mechanism">
+      <h2>How the price settled</h2>
+      <p>Nobody set the price. Teams took more threes, and the extra threes were harder ones, so
+        3-point accuracy slipped. With more shooters spread around the arc, the paint opened up and
+        2-point accuracy rose. Both moves push the ratio toward 1.5.</p>
+      <div class="small-multiples">
+        <figure><figcaption>Share of shots that are threes</figcaption><div class="chart" id="share-chart"></div></figure>
+        <figure><figcaption class="three">3-point %</figcaption><div class="chart" id="p3-chart"></div></figure>
+        <figure><figcaption class="two">2-point %</figcaption><div class="chart" id="p2-chart"></div></figure>
+      </div>
+    </section>
+
+    <section id="adjust">
+      <h2>The twist: teams didn't adjust to their own numbers</h2>
+      <p>If each team went after its own best shot, teams above 1.5 would cut back on threes
+        the next season. They did the opposite. Teams for whom twos were the better shot
+        increased their share of threes the most. The whole league moved together toward the
+        three, and the league average landed on 1.5.</p>
+      <div class="chart" id="adjust-chart"></div>
+      <p class="caption">Average change in a team's 3-point share of attempts from one season to the
+        next, grouped by that team's 2P% ÷ 3P% ratio in the first season. Includes 2014–2026 team-season
+        pairs.</p>
+    </section>
+
+    <section id="wins">
+      <h2>Does balance win?</h2>
+      <p>Somewhat. Teams near 1.5 win a little more often than teams at either extreme.</p>
+      <div class="toggle" role="group" aria-label="Season range">
+        <button type="button" data-set="latest" class="on" id="wins-latest"></button>
+        <button type="button" data-set="pooled">2017–2026</button>
+      </div>
+      <div class="chart" id="wins-chart"></div>
+    </section>
+
+    <section id="next">
+      <h2>What's next</h2>
+      <p id="next-text"></p>
+    </section>
+
+    <section id="methods" class="methods">
+      <h2>Data &amp; methods</h2>
+      <ul>
+        <li><b>Source:</b> the Love Data Week 2026 NCAA Women's Basketball data files
+          (<code>team_box</code> table, one row per team per game).</li>
+        <li><b>Seasons:</b> 2014–2026. Earlier seasons have too few games to use. The data covers
+          only about 66 teams per season in 2014–2016 and 348+ from 2017 on. The dotted line on each chart marks that change.</li>
+        <li><b>Teams:</b> a team-season counts if the team played at least 20 games. 2P% and 3P%
+          are totals across all of a team's games (total makes ÷ total attempts), not
+          averages of per-game percentages.</li>
+        <li><b>Top 10:</b> the ten teams with the best win percentage each season.</li>
+        <li><b>Limits:</b> the 1.5 rule compares points per attempt only. It ignores free throws
+          and and-ones (more common on twos), offensive rebounds after misses, and shot-clock
+          situations, so the true break-even point for a given team may be a little above or
+          below 1.5.</li>
+        <li><b>Code:</b> <code>scripts/export_data.py</code> builds the JSON in
+          <code>docs/data/</code>. The charts use D3.</li>
+      </ul>
+      <p class="byline">By <b>[Your name]</b>, [University]</p>
+    </section>
+  </main>
+
+  <div class="tooltip" id="tooltip" role="tooltip"></div>
+</body>
+</html>

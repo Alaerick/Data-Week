@@ -1,0 +1,6 @@
+# Raw data and database are too large for GitHub; only docs/data/*.json is published.
+basketball.db
+NCAA Women's Basketball Data Files 2026/
+*.parquet
+*.csv
+__pycache__/
