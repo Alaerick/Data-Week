@@ -119,34 +119,21 @@ def main():
         for r in rows.itertuples()
     ])
 
-    # --- adjustment.json: did teams move toward their better shot? ---------
-    # Pair each team-season with the same team's next season and measure the
-    # change in 3-point share of attempts. Ratio > 1.5 means twos were the
-    # better shot for that team, so a "rational" team would shoot fewer threes.
-    nxt = teams[["season", "team_id", "share3"]].assign(season=lambda d: d.season - 1)
-    pairs = teams.merge(nxt, on=["season", "team_id"], suffixes=("", "_next"))
-    pairs["change"] = pairs.share3_next - pairs.share3
-    adjustment = (
-        pairs.groupby("band", observed=False)["change"]
-        .agg(["size", "mean"])
-        .reset_index()
-    )
-    write("adjustment.json", [
-        {"band": str(r.band), "n": int(r.size), "change_pp": float(r.mean) * 100}
-        for r in adjustment.itertuples()
-    ])
-
-    # --- winpct.json: win% by ratio band, 2026 and 2017-2026 pooled --------
-    # 2017+ only for the pooled view: earlier seasons cover ~66 teams.
+    # --- winpct.json: win% by ratio band, every season plus all pooled ----
     def band_wins(df):
         g = df.groupby("band", observed=False)["win_pct"].agg(["size", "mean"]).reset_index()
-        return [{"band": str(r.band), "n": int(r.size), "win_pct": float(r.mean)} for r in g.itertuples()]
+        return [
+            {"band": str(r.band), "n": int(r.size), "win_pct": None if r.size == 0 else float(r.mean)}
+            for r in g.itertuples()
+        ]
 
-    latest = int(teams.season.max())
     write("winpct.json", {
-        "latest_season": latest,
-        "latest": band_wins(teams[teams.season == latest]),
-        "pooled": band_wins(teams[teams.season >= 2017]),
+        "bands": BAND_LABELS,
+        "seasons": [
+            {"season": int(season), "cells": band_wins(g)}
+            for season, g in teams.groupby("season")
+        ],
+        "pooled": band_wins(teams),
     })
 
 

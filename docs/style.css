@@ -10,6 +10,7 @@
   --three: #eb6834;
   --league: #1baf7a;
   --top: #eda100;
+  --loss: #c4314b;
   --dot: #8f8d86;
   --focus: #0b0b0b;
   --font: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
@@ -29,6 +30,7 @@
     --three: #f2814f;
     --league: #3cc895;
     --top: #f5b82e;
+    --loss: #e5566f;
     --dot: #77756e;
     --focus: #f2f1ec;
     color-scheme: dark;
@@ -46,6 +48,7 @@
   --three: #f2814f;
   --league: #3cc895;
   --top: #f5b82e;
+  --loss: #e5566f;
   --dot: #77756e;
   --focus: #f2f1ec;
   color-scheme: dark;
@@ -73,16 +76,8 @@ main > section.wide > p { max-width: 728px; }
 .kicker { color: var(--muted); font-size: 14px; letter-spacing: .04em; text-transform: uppercase; margin: 0; }
 h1 { font-size: clamp(44px, 9vw, 76px); line-height: 1; margin: 8px 0 12px; letter-spacing: -.02em; }
 h2 { font-size: 26px; line-height: 1.25; margin: 0 0 12px; letter-spacing: -.01em; }
-.dek { font-size: 22px; line-height: 1.4; color: var(--ink-2); margin: 0 0 24px; }
-.lede { font-size: 19px; }
 b.two, .two { color: var(--two); }
 b.three, .three { color: var(--three); }
-
-.stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; margin-top: 24px; }
-.stat { background: var(--surface); border: 1px solid var(--grid); border-radius: 10px; padding: 14px 16px; }
-.stat .label { font-size: 13px; color: var(--ink-2); }
-.stat .value { font-size: 26px; font-weight: 700; font-variant-numeric: tabular-nums; }
-.stat .from { font-size: 13px; color: var(--muted); }
 
 .card { background: var(--surface); border: 1px solid var(--grid); border-radius: 12px; padding: 20px; }
 .sliders { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
@@ -147,9 +142,12 @@ button:hover { border-color: var(--ink-2); }
 .small-multiples figure { margin: 0; min-width: 0; }
 .small-multiples figcaption { font-size: 14px; font-weight: 600; }
 
-.toggle { display: inline-flex; border: 1px solid var(--axis); border-radius: 8px; overflow: hidden; margin: 8px 0; }
-.toggle button { border: 0; border-radius: 0; background: transparent; color: var(--ink-2); }
-.toggle button.on { background: var(--ink); color: var(--bg); }
+.win-bg { background: var(--league); height: 10px; }
+.loss-bg { background: var(--loss); height: 10px; }
+.cell-empty { fill: none; stroke: var(--grid); }
+.cell-text { font-variant-numeric: tabular-nums; fill: var(--ink) !important; }
+.row-label { font-weight: 600; }
+.pooled-label { font-weight: 700; fill: var(--ink) !important; }
 
 .methods { font-size: 15px; color: var(--ink-2); padding-bottom: 96px !important; }
 .methods li { margin-bottom: 8px; }

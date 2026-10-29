@@ -5,12 +5,10 @@ const COVERAGE_BREAK = 2017; // ~66 teams/season before, 348+ from here on
 const fmtPct = d3.format(".1%");
 const fmtPct0 = d3.format(".0%");
 const fmt2 = d3.format(".2f");
-const fmt3 = d3.format(".3f");
 
-const [league, teams, adjustment, winpct] = await Promise.all(
-  ["league", "teams", "adjustment", "winpct"].map((n) => d3.json(`data/${n}.json`)),
+const [league, teams, winpct] = await Promise.all(
+  ["league", "teams", "winpct"].map((n) => d3.json(`data/${n}.json`)),
 );
-const first = league[0];
 const last = league.at(-1);
 const teamsBySeason = d3.group(teams, (d) => d.season);
 const teamsById = d3.group(teams, (d) => d.id);
@@ -97,65 +95,6 @@ function lineChart(el, width, { series, yFormat, height = 280, ref, band, compac
     .on("pointerleave", () => { rule.style("opacity", 0); hideTip(); });
 }
 
-// Vertical bars measured from a baseline (0 or 50%), one per ratio band.
-function bandBars(el, width, { data, value, format, baseline = 0, color, height = 260, yLabel, tip }) {
-  // Extra top margin keeps the y label and break-even labels clear of the bars.
-  const m = { t: 40, r: 12, b: 44, l: 52 };
-  const svg = d3.select(el).html("").append("svg").attr("width", width).attr("height", height);
-  const x = d3.scaleBand().domain(data.map((d) => d.band)).range([m.l, width - m.r]).padding(0.25);
-  const ext = d3.extent([baseline, ...data.map(value)]);
-  const pad = (ext[1] - ext[0]) * 0.12;
-  const y = d3.scaleLinear().domain([Math.min(ext[0], baseline) - (ext[0] < baseline ? pad : 0), ext[1] + pad]).nice().range([height - m.b, m.t]);
-
-  svg.append("g").attr("class", "grid").attr("transform", `translate(${m.l},0)`)
-    .call(d3.axisLeft(y).ticks(5).tickSize(-(width - m.l - m.r)).tickFormat(format));
-  svg.append("g").attr("class", "axis").attr("transform", `translate(0,${height - m.b})`).call(d3.axisBottom(x).tickSize(0))
-    .call((g) => g.select(".domain").remove());
-  svg.append("text").attr("x", (m.l + width - m.r) / 2).attr("y", height - 6).attr("text-anchor", "middle")
-    .text("Team's 2P% ÷ 3P% ratio");
-  if (yLabel) svg.append("text").attr("x", m.l).attr("y", m.t - 26).text(yLabel);
-  svg.append("line").attr("stroke", "var(--ink-2)").attr("x1", m.l).attr("x2", width - m.r).attr("y1", y(baseline)).attr("y2", y(baseline));
-
-  // Break-even divider between the 1.4–1.5 and 1.5–1.6 bands.
-  const bands = x.domain();
-  const i = bands.findIndex((b) => b.startsWith("1.5"));
-  if (i > 0) {
-    const bx = x(bands[i]) - (x.step() * x.paddingInner()) / 2;
-    svg.append("line").attr("class", "ref-line").attr("x1", bx).attr("x2", bx).attr("y1", m.t - 16).attr("y2", height - m.b);
-    svg.append("text").attr("class", "ref-label").attr("x", bx - 6).attr("y", m.t - 6).attr("text-anchor", "end").text("threes better ←");
-    svg.append("text").attr("class", "ref-label").attr("x", bx + 6).attr("y", m.t - 6).text("→ twos better");
-  }
-
-  svg.append("g").selectAll("rect").data(data).join("rect")
-    .attr("x", (d) => x(d.band)).attr("width", x.bandwidth())
-    .attr("y", (d) => Math.min(y(value(d)), y(baseline)))
-    .attr("height", (d) => Math.abs(y(value(d)) - y(baseline)))
-    .attr("rx", 3).style("fill", color)
-    .on("pointermove", (event, d) => showTip(event, tip(d)))
-    .on("pointerleave", hideTip);
-  svg.append("g").selectAll("text").data(data).join("text")
-    .attr("x", (d) => x(d.band) + x.bandwidth() / 2)
-    .attr("y", (d) => (value(d) >= baseline ? y(value(d)) - 6 : y(value(d)) + 14))
-    .attr("text-anchor", "middle").style("font-weight", 600).style("fill", "var(--ink)")
-    .text((d) => format(value(d)));
-}
-const bandColor = (d) => (d.band.startsWith("<") || d.band.startsWith("1.3") || d.band.startsWith("1.4") ? "var(--three)" : "var(--two)");
-
-// ------------------------------------------------------------------- hero --
-
-d3.select("#hero-lede").html(
-  `In ${first.season}, a three-pointer was worth <b class="three">${fmt3(first.pps3)}</b> points per shot ` +
-  `and a two was worth <b class="two">${fmt3(first.pps2)}</b>. In ${last.season}: ` +
-  `<b class="three">${fmt3(last.pps3)}</b> vs <b class="two">${fmt3(last.pps2)}</b>.`,
-);
-d3.select("#hero-stats").selectAll("div").data([
-  { label: "D-I 2P% ÷ 3P%", from: first.ratio, to: last.ratio, f: fmt2 },
-  { label: "Extra points per 3 (vs. a 2)", from: first.pps3 - first.pps2, to: last.pps3 - last.pps2, f: (v) => `+${fmt3(v)}` },
-  { label: "Shots that are threes", from: first.share3, to: last.share3, f: fmtPct0 },
-  { label: "Teams for whom threes were the better shot", from: first.pct_threes_better, to: last.pct_threes_better, f: fmtPct0 },
-]).join("div").attr("class", "stat").html((d) =>
-  `<div class="label">${d.label}</div><div class="value">${d.f(d.to)}</div><div class="from">${d.f(d.from)} in ${first.season}</div>`);
-
 // -------------------------------------------------------------- explainer --
 
 const p2Input = document.getElementById("p2");
@@ -220,36 +159,53 @@ responsive("#p2-chart", (el, w) => lineChart(el, w, {
   series: [{ key: "p2", label: "2P%", color: "var(--two)" }], yFormat: fmtPct0, height: 200, compact: true,
 }));
 
-// ------------------------------------------------------------ adjustment --
-
-responsive("#adjust-chart", (el, w) => bandBars(el, w, {
-  data: adjustment,
-  value: (d) => d.change_pp,
-  format: (v) => `${v > 0 ? "+" : ""}${v.toFixed(1)} pts`,
-  color: bandColor,
-  yLabel: "Change in 3-pt share of shots, next season",
-  tip: (d) => `<div class="t-title">Ratio ${d.band}</div>${tipRow("Team-seasons", d.n)}${tipRow("Avg. change", `${d.change_pp.toFixed(2)} pts`)}`,
-}));
-
 // ------------------------------------------------------------------- wins --
 
-let winSet = "latest";
-d3.select("#wins-latest").text(String(winpct.latest_season));
-const drawWins = responsive("#wins-chart", (el, w) => bandBars(el, w, {
-  data: winpct[winSet],
-  value: (d) => d.win_pct,
-  baseline: 0.5,
-  format: fmtPct0,
-  color: bandColor,
-  yLabel: "Average win %",
-  tip: (d) => `<div class="t-title">Ratio ${d.band}</div>${tipRow("Team-seasons", d.n)}${tipRow("Win %", fmtPct(d.win_pct))}`,
-}));
-d3.selectAll(".toggle button").on("click", function () {
-  winSet = this.dataset.set;
-  d3.selectAll(".toggle button").classed("on", false);
-  d3.select(this).classed("on", true);
-  drawWins();
-});
+// Season × ratio-band grid; cell shade shows how far average win% is from 50%.
+const MIN_CELL_TEAMS = 5;
+function drawWins(el, width) {
+  const rows = [...winpct.seasons.map((s) => ({ label: String(s.season), cells: s.cells })),
+    { label: "All", cells: winpct.pooled, pooled: true }];
+  const m = { t: 40, r: 4, b: 28, l: 48 };
+  const rowH = 28;
+  const gap = 10; // space above the pooled row
+  const height = m.t + rows.length * rowH + gap + m.b;
+  const svg = d3.select(el).html("").append("svg").attr("width", width).attr("height", height);
+  const x = d3.scaleBand().domain(winpct.bands).range([m.l, width - m.r]).paddingInner(0.06);
+  const rowY = (i) => m.t + i * rowH + (rows[i].pooled ? gap : 0);
+  const strength = d3.scaleLinear().domain([0, 0.15]).range([0.08, 0.9]).clamp(true);
+
+  svg.append("g").selectAll("text").data(winpct.bands).join("text")
+    .attr("x", (b) => x(b) + x.bandwidth() / 2).attr("y", m.t - 8).attr("text-anchor", "middle").text((b) => b);
+  const i15 = winpct.bands.findIndex((b) => b.startsWith("1.5"));
+  const bx = x(winpct.bands[i15]) - (x.step() * x.paddingInner()) / 2;
+  svg.append("line").attr("class", "ref-line").attr("x1", bx).attr("x2", bx).attr("y1", m.t - 30).attr("y2", height - m.b + 4);
+  svg.append("text").attr("class", "ref-label").attr("x", bx - 6).attr("y", m.t - 24).attr("text-anchor", "end").text("threes better ←");
+  svg.append("text").attr("class", "ref-label").attr("x", bx + 6).attr("y", m.t - 24).text("→ twos better");
+  svg.append("text").attr("x", (m.l + width - m.r) / 2).attr("y", height - 6).attr("text-anchor", "middle")
+    .text("Team's 2P% ÷ 3P% ratio");
+
+  rows.forEach((row, i) => {
+    const g = svg.append("g").attr("transform", `translate(0,${rowY(i)})`);
+    g.append("text").attr("class", row.pooled ? "pooled-label" : "row-label")
+      .attr("x", m.l - 8).attr("y", rowH / 2).attr("dy", "0.35em").attr("text-anchor", "end").text(row.label);
+    const cells = g.selectAll("g").data(row.cells).join("g").attr("transform", (d) => `translate(${x(d.band)},0)`);
+    const ok = (d) => d.n >= MIN_CELL_TEAMS && d.win_pct != null;
+    cells.append("rect").attr("width", x.bandwidth()).attr("height", rowH - 3).attr("rx", 3)
+      .attr("class", (d) => (ok(d) ? null : "cell-empty"))
+      .style("fill", (d) => (ok(d) ? (d.win_pct >= 0.5 ? "var(--league)" : "var(--loss)") : null))
+      .style("fill-opacity", (d) => (ok(d) ? strength(Math.abs(d.win_pct - 0.5)) : null))
+      .on("pointermove", (event, d) => showTip(event,
+        `<div class="t-title">${row.pooled ? "All seasons" : row.label} · ratio ${d.band}</div>` +
+        tipRow("Teams", d.n) + tipRow("Avg. win %", d.win_pct == null ? "–" : fmtPct(d.win_pct))))
+      .on("pointerleave", hideTip);
+    cells.filter(ok).append("text").attr("class", "cell-text")
+      .attr("x", x.bandwidth() / 2).attr("y", (rowH - 3) / 2).attr("dy", "0.35em").attr("text-anchor", "middle")
+      .style("font-weight", row.pooled ? 700 : 400).style("pointer-events", "none")
+      .text((d) => fmtPct0(d.win_pct));
+  });
+}
+responsive("#wins-chart", drawWins);
 
 // ------------------------------------------------------------------ next --
 

@@ -13,15 +13,11 @@
   <header class="hero">
     <p class="kicker">NCAA Division I women's basketball · 2014–2026</p>
     <h1>How NCAA teams improved from 2014-2026</h1>
-    <p class="dek">A three-pointer is worth 1.5 twos. Over twelve seasons, the game has
-      settled on exactly that price.</p>
-    <p class="lede" id="hero-lede"></p>
-    <div class="stats" id="hero-stats"></div>
   </header>
 
   <main>
     <section id="why">
-      <h2>Why 1.5?</h2>
+      <h2>Balancing two point shots and three point shots</h2>
       <p>In basketball, there are two types of shots: twos and threes. A three counts for 3 points and a two for 2, so a three only has to go in
         <b>two-thirds as often</b> to be worth the same. Divide a team's 2-point percentage by
         its 3-point percentage: if the result is <b>below 1.5</b>, threes are the better shot.
@@ -61,7 +57,7 @@
       <div class="chart" id="pps-chart"></div>
     </section>
 
-    <section id="teams" class="wide">
+    <section id="teams">
       <h2>Every team, every season</h2>
       <p>Each dot is a team. Teams <b>below the line</b> got more points from threes than
         from twos; teams <b>above</b> it got more from twos. Press play and watch the
@@ -70,7 +66,7 @@
         <button id="play" type="button" aria-label="Play seasons">▶ Play</button>
         <input type="range" id="season" aria-label="Season">
         <output id="season-out"></output>
-        <input type="search" id="team-search" list="team-names" placeholder="Find a team…" aria-label="Find a team">
+        <input type="search" id="team-search" list="team-names" placeholder="Highlight a team…" aria-label="Highlight a team">
         <datalist id="team-names"></datalist>
         <label class="check"><input type="checkbox" id="top10" checked> Ring the top 10</label>
       </div>
@@ -79,10 +75,9 @@
     </section>
 
     <section id="mechanism">
-      <h2>How the price settled</h2>
-      <p>Nobody set the price. Teams took more threes, and the extra threes were harder ones, so
-        3-point accuracy slipped. With more shooters spread around the arc, the paint opened up and
-        2-point accuracy rose. Both moves push the ratio toward 1.5.</p>
+      <p>Over the course of the 2014-2026 seasons, teams have increased the number of three point attempts relative to two point attempts. Making three point shot
+        attempts more common, decreasing accuracy on three point shots overall. Meanwhile two point shots have been attempted less, making their overall accuracy higher over time.
+      </p>
       <div class="small-multiples">
         <figure><figcaption>Share of shots that are threes</figcaption><div class="chart" id="share-chart"></div></figure>
         <figure><figcaption class="three">3-point %</figcaption><div class="chart" id="p3-chart"></div></figure>
@@ -90,26 +85,18 @@
       </div>
     </section>
 
-    <section id="adjust">
-      <h2>The twist: teams didn't adjust to their own numbers</h2>
-      <p>If each team went after its own best shot, teams above 1.5 would cut back on threes
-        the next season. They did the opposite. Teams for whom twos were the better shot
-        increased their share of threes the most. The whole league moved together toward the
-        three, and the league average landed on 1.5.</p>
-      <div class="chart" id="adjust-chart"></div>
-      <p class="caption">Average change in a team's 3-point share of attempts from one season to the
-        next, grouped by that team's 2P% ÷ 3P% ratio in the first season. Includes 2014–2026 team-season
-        pairs.</p>
-    </section>
-
     <section id="wins">
-      <h2>Does balance win?</h2>
-      <p>Somewhat. Teams near 1.5 win a little more often than teams at either extreme.</p>
-      <div class="toggle" role="group" aria-label="Season range">
-        <button type="button" data-set="latest" class="on" id="wins-latest"></button>
-        <button type="button" data-set="pooled">2017–2026</button>
+      <p>As shown below, every row is a season. In general teams closer to the 1.5 ratio tend to have a higher win rate than teams on either extreme. 
+        Which is why teams converged on the more balanced approach over time.
+      </p>
+      <div class="legend">
+        <span><i class="sw win-bg"></i>Won more than half their games</span>
+        <span><i class="sw loss-bg"></i>Won less than half</span>
       </div>
       <div class="chart" id="wins-chart"></div>
+      <p class="caption">Average win % of the teams in each cell. Hover a cell for the number of teams.
+        Cells with fewer than 5 teams are left blank. In 2014–2016 the data covers only about 66 teams,
+        mostly stronger programs, so most cells in those years are above 50%.</p>
     </section>
 
     <section id="next">
