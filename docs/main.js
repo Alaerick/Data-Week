@@ -31,12 +31,16 @@ const tipRow = (label, value, cls = "") => `<div class="t-row"><span class="${cl
 function responsive(selector, draw) {
   const el = document.querySelector(selector);
   let width = 0;
-  new ResizeObserver(() => {
-    if (el.clientWidth !== width) {
+  const redrawIfResized = () => {
+    if (el.clientWidth && el.clientWidth !== width) {
       width = el.clientWidth;
       draw(el, width);
     }
-  }).observe(el);
+  };
+  // Draw right away; ResizeObserver callbacks wait for the next paint, which
+  // can be delayed indefinitely in a background tab.
+  redrawIfResized();
+  new ResizeObserver(redrawIfResized).observe(el);
   return () => width && draw(el, width);
 }
 
@@ -152,11 +156,11 @@ responsive("#share-chart", (el, w) => lineChart(el, w, {
   series: [{ key: "share3", label: "Threes", color: "var(--ink-2)" }], yFormat: fmtPct0, height: 200, compact: true,
 }));
 responsive("#p3-chart", (el, w) => lineChart(el, w, {
-  series: [{ key: "p3", label: "3-pt accuracy", color: "var(--three)" }], yFormat: fmtPct0, height: 200, compact: true,
+  series: [{ key: "p3", label: "3-pt accuracy", color: "var(--three)" }], yFormat: d3.format(".1~%"), height: 200, compact: true,
   tipFormat: fmtPct,
 }));
 responsive("#p2-chart", (el, w) => lineChart(el, w, {
-  series: [{ key: "p2", label: "2-pt accuracy", color: "var(--two)" }], yFormat: fmtPct0, height: 200, compact: true,
+  series: [{ key: "p2", label: "2-pt accuracy", color: "var(--two)" }], yFormat: d3.format(".1~%"), height: 200, compact: true,
 }));
 
 // ------------------------------------------------------------------- wins --

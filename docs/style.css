@@ -111,6 +111,8 @@ b.three, .three { color: var(--three); }
 .coverage-label { fill: var(--muted) !important; font-size: 11px !important; }
 .hover-rule { stroke: var(--axis); }
 
+.question { font-size: 22px; font-weight: 700; line-height: 1.35; margin: 32px 0 0; }
+
 .caption { font-size: 14px; color: var(--ink-2); }
 
 .controls { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; margin: 16px 0 8px; }
