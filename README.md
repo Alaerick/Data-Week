@@ -23,8 +23,3 @@ python -m http.server 8000 --directory docs
 
 Then open http://localhost:8000.
 
-## Publish on GitHub Pages
-
-1. Push this repo to GitHub (the database and raw CSV/parquet files are git-ignored).
-2. Settings → Pages → Build and deployment → Deploy from a branch → `main`, folder `/docs`.
-3. The site appears at `https://<username>.github.io/<repo>/`.
