@@ -119,7 +119,7 @@ function updateExplainer() {
   else if (pps3 > pps2) verdict = `Threes are better by ${per100.toFixed(0)} points per 100 shots.`;
   else verdict = `Twos are better by ${per100.toFixed(0)} points per 100 shots.`;
   d3.select("#verdict").html(
-    `Ratio ${fmt2(ratio)}. ${verdict} <span style="font-weight:400;color:var(--ink-2)">Break-even 3P% at this 2P%: ${fmtPct(p2 / BREAK_EVEN)}.</span>`,
+    `Accuracy ratio ${fmt2(ratio)}. ${verdict} <span style="font-weight:400;color:var(--ink-2)">At this 2-point accuracy, threes break even at ${fmtPct(p2 / BREAK_EVEN)}.</span>`,
   );
 }
 p2Input.addEventListener("input", updateExplainer);
@@ -152,11 +152,11 @@ responsive("#share-chart", (el, w) => lineChart(el, w, {
   series: [{ key: "share3", label: "Threes", color: "var(--ink-2)" }], yFormat: fmtPct0, height: 200, compact: true,
 }));
 responsive("#p3-chart", (el, w) => lineChart(el, w, {
-  series: [{ key: "p3", label: "3P%", color: "var(--three)" }], yFormat: fmtPct0, height: 200, compact: true,
+  series: [{ key: "p3", label: "3-pt accuracy", color: "var(--three)" }], yFormat: fmtPct0, height: 200, compact: true,
   tipFormat: fmtPct,
 }));
 responsive("#p2-chart", (el, w) => lineChart(el, w, {
-  series: [{ key: "p2", label: "2P%", color: "var(--two)" }], yFormat: fmtPct0, height: 200, compact: true,
+  series: [{ key: "p2", label: "2-pt accuracy", color: "var(--two)" }], yFormat: fmtPct0, height: 200, compact: true,
 }));
 
 // ------------------------------------------------------------------- wins --
@@ -183,7 +183,7 @@ function drawWins(el, width) {
   svg.append("text").attr("class", "ref-label").attr("x", bx - 6).attr("y", m.t - 24).attr("text-anchor", "end").text("threes better ←");
   svg.append("text").attr("class", "ref-label").attr("x", bx + 6).attr("y", m.t - 24).text("→ twos better");
   svg.append("text").attr("x", (m.l + width - m.r) / 2).attr("y", height - 6).attr("text-anchor", "middle")
-    .text("Team's 2P% ÷ 3P% ratio");
+    .text("Team's accuracy ratio (2-pt ÷ 3-pt)");
 
   rows.forEach((row, i) => {
     const g = svg.append("g").attr("transform", `translate(0,${rowY(i)})`);
@@ -196,7 +196,7 @@ function drawWins(el, width) {
       .style("fill", (d) => (ok(d) ? (d.win_pct >= 0.5 ? "var(--league)" : "var(--loss)") : null))
       .style("fill-opacity", (d) => (ok(d) ? strength(Math.abs(d.win_pct - 0.5)) : null))
       .on("pointermove", (event, d) => showTip(event,
-        `<div class="t-title">${row.pooled ? "All seasons" : row.label} · ratio ${d.band}</div>` +
+        `<div class="t-title">${row.pooled ? "All seasons" : row.label} · accuracy ratio ${d.band}</div>` +
         tipRow("Teams", d.n) + tipRow("Avg. win %", d.win_pct == null ? "–" : fmtPct(d.win_pct))))
       .on("pointerleave", hideTip);
     cells.filter(ok).append("text").attr("class", "cell-text")
@@ -244,7 +244,7 @@ function drawScatter(el, width) {
   sy = d3.scaleLinear().domain(yDomain).range([height - m.b, m.t]).clamp(true);
   const svg = scatterSvg;
 
-  // Regions split by the break-even line 2P% = 1.5 × 3P%.
+  // Regions split by the break-even line: 2-pt accuracy = 1.5 × 3-pt accuracy.
   const [x0, x1] = xDomain;
   const [y0, y1] = yDomain;
   const linePts = [[x0, BREAK_EVEN * x0], [x1, BREAK_EVEN * x1]];
@@ -258,8 +258,8 @@ function drawScatter(el, width) {
     .call(d3.axisLeft(sy).ticks(6).tickSize(-(width - m.l - m.r)).tickFormat(fmtPct0));
   svg.append("g").attr("class", "axis").attr("transform", `translate(0,${height - m.b})`)
     .call(d3.axisBottom(sx).ticks(width < 500 ? 5 : 8).tickFormat(fmtPct0));
-  svg.append("text").attr("x", (m.l + width - m.r) / 2).attr("y", height - 6).attr("text-anchor", "middle").text("3-point %");
-  svg.append("text").attr("x", m.l).attr("y", m.t - 4).text("2-point %");
+  svg.append("text").attr("x", (m.l + width - m.r) / 2).attr("y", height - 6).attr("text-anchor", "middle").text("3-point accuracy (how often threes go in)");
+  svg.append("text").attr("x", m.l).attr("y", m.t - 4).text("2-point accuracy");
 
   svg.append("line").attr("class", "ref-line")
     .attr("x1", sx(x0)).attr("y1", sy(BREAK_EVEN * x0)).attr("x2", sx(x1)).attr("y2", sy(BREAK_EVEN * x1));
@@ -295,9 +295,9 @@ function updateScatter(animate = true) {
     .on("pointermove", (event, d) => showTip(event,
       `<div class="t-title">${d.name}${d.top10 ? " ★" : ""}</div>` +
       tipRow("Season", d.season) +
-      tipRow("2-point %", fmtPct(d.p2), "two") +
-      tipRow("3-point %", fmtPct(d.p3), "three") +
-      tipRow("Ratio", fmt2(d.p2 / d.p3)) +
+      tipRow("2-pt accuracy", fmtPct(d.p2), "two") +
+      tipRow("3-pt accuracy", fmtPct(d.p3), "three") +
+      tipRow("Accuracy ratio", fmt2(d.p2 / d.p3)) +
       tipRow("Threes share", fmtPct0(d.share3)) +
       tipRow("Win %", `${fmtPct0(d.win_pct)} (${d.games} g)`)))
     .on("pointerleave", hideTip)
@@ -324,7 +324,7 @@ function updateScatter(animate = true) {
   d3.select("#season-out").text(state.season);
   d3.select("#scatter-caption").html(
     `${state.season}: <b>${data.length}</b> teams, <b>${fmtPct0(below / data.length)}</b> below the line, so threes were their better shot. ` +
-    `<span style="color:var(--league)">◆</span> marks the D-I average (ratio ${fmt2(lg.ratio)}).`,
+    `<span style="color:var(--league)">◆</span> marks the D-I average (accuracy ratio ${fmt2(lg.ratio)}).`,
   );
 }
 

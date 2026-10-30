@@ -19,14 +19,14 @@
     <section id="why">
       <h2>Balancing two point shots and three point shots</h2>
       <p>In basketball, there are two types of shots: twos and threes. A three counts for 3 points and a two for 2, so a three only has to go in
-        <b>two-thirds as often</b> to be worth the same. Divide a team's 2-point percentage by
-        its 3-point percentage: if the result is <b>below 1.5</b>, threes are the better shot.
+        <b>two-thirds as often</b> to be worth the same. Take a team's <b class="two">2-point accuracy</b> (how often its twos go in) and divide it by its
+        <b class="three">3-point accuracy</b> (how often its threes go in). We call this the <b>accuracy ratio</b>. If it is <b>below 1.5</b>, threes are the better shot.
         <b>Above 1.5</b>, twos are. At exactly 1.5, it doesn't matter which one you take.</p>
       <div class="card explainer">
         <div class="sliders">
-          <label><span class="two">2-point %</span> <output id="p2-out"></output>
+          <label><span class="two">2-point accuracy</span> <output id="p2-out"></output>
             <input type="range" id="p2" min="0.35" max="0.60" step="0.005"></label>
-          <label><span class="three">3-point %</span> <output id="p3-out"></output>
+          <label><span class="three">3-point accuracy</span> <output id="p3-out"></output>
             <input type="range" id="p3" min="0.20" max="0.45" step="0.005"></label>
         </div>
         <div class="pps">
@@ -39,7 +39,7 @@
 
     <section id="convergence">
       <h2>The league walked to the line</h2>
-      <p>Each season's 2P% ÷ 3P% for all of Division I. In 2014 threes were clearly
+      <p>Each season's accuracy ratio for all of Division I. In 2014 threes were clearly
         underused; by 2026 the league sits almost exactly on 1.5. The season's ten best
         teams by win percentage got there first.</p>
       <div class="legend">
@@ -80,8 +80,8 @@
       </p>
       <div class="small-multiples">
         <figure><figcaption>Share of shots that are threes</figcaption><div class="chart" id="share-chart"></div></figure>
-        <figure><figcaption class="three">3-point %</figcaption><div class="chart" id="p3-chart"></div></figure>
-        <figure><figcaption class="two">2-point %</figcaption><div class="chart" id="p2-chart"></div></figure>
+        <figure><figcaption class="three">3-point accuracy</figcaption><div class="chart" id="p3-chart"></div></figure>
+        <figure><figcaption class="two">2-point accuracy</figcaption><div class="chart" id="p2-chart"></div></figure>
       </div>
     </section>
 
@@ -111,8 +111,8 @@
           (<code>team_box</code> table, one row per team per game).</li>
         <li><b>Seasons:</b> 2014–2026. Earlier seasons have too few games to use. The data covers
           only about 66 teams per season in 2014–2016 and 348+ from 2017 on. The dotted line on each chart marks that change.</li>
-        <li><b>Teams:</b> a team-season counts if the team played at least 20 games. 2P% and 3P%
-          are totals across all of a team's games (total makes ÷ total attempts), not
+        <li><b>Teams:</b> a team-season counts if the team played at least 20 games. 2-point and 3-point
+          accuracy are totals across all of a team's games (total makes ÷ total attempts), not
           averages of per-game percentages.</li>
         <li><b>Top 10:</b> the ten teams with the best win percentage each season.</li>
         <li><b>Limits:</b> the 1.5 rule compares points per attempt only. It ignores free throws
