@@ -170,7 +170,7 @@ const MIN_CELL_TEAMS = 5;
 function drawWins(el, width) {
   const rows = [...winpct.seasons.map((s) => ({ label: String(s.season), cells: s.cells })),
     { label: "All", cells: winpct.pooled, pooled: true }];
-  const m = { t: 40, r: 4, b: 28, l: 48 };
+  const m = { t: 54, r: 4, b: 28, l: 48 };
   const rowH = 28;
   const gap = 10; // space above the pooled row
   const height = m.t + rows.length * rowH + gap + m.b;
@@ -183,9 +183,9 @@ function drawWins(el, width) {
     .attr("x", (b) => x(b) + x.bandwidth() / 2).attr("y", m.t - 8).attr("text-anchor", "middle").text((b) => b);
   const i15 = winpct.bands.findIndex((b) => b.startsWith("1.5"));
   const bx = x(winpct.bands[i15]) - (x.step() * x.paddingInner()) / 2;
-  svg.append("line").attr("class", "ref-line").attr("x1", bx).attr("x2", bx).attr("y1", m.t - 30).attr("y2", height - m.b + 4);
-  svg.append("text").attr("class", "ref-label").attr("x", bx - 6).attr("y", m.t - 24).attr("text-anchor", "end").text("threes better ←");
-  svg.append("text").attr("class", "ref-label").attr("x", bx + 6).attr("y", m.t - 24).text("→ twos better");
+  svg.append("line").attr("class", "ref-line").attr("x1", bx).attr("x2", bx).attr("y1", m.t - 50).attr("y2", height - m.b + 4);
+  svg.append("text").attr("class", "ref-label").attr("x", bx - 6).attr("y", m.t - 40).attr("text-anchor", "end").text("threes better ←");
+  svg.append("text").attr("class", "ref-label").attr("x", bx + 6).attr("y", m.t - 40).text("→ twos better");
   svg.append("text").attr("x", (m.l + width - m.r) / 2).attr("y", height - 6).attr("text-anchor", "middle")
     .text("Team's accuracy ratio (2-pt ÷ 3-pt)");
 

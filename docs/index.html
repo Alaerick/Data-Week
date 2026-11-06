@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>How NCAA teams improved from 2014-2026</title>
-  <meta name="description" content="How NCAA women's basketball priced the three-pointer correctly, 2014–2026.">
+  <title>Closing In on 1.5</title>
+  <meta name="description" content="How NCAA women's basketball teams spent twelve seasons learning to balance twos and threes, 2014–2026.">
   <link rel="stylesheet" href="style.css">
   <script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
   <script type="module" src="main.js"></script>
@@ -12,7 +12,8 @@
 <body>
   <header class="hero">
     <p class="kicker">NCAA Division I women's basketball · 2014–2026</p>
-    <h1>How NCAA teams improved from 2014-2026</h1>
+    <h1>Closing In on 1.5</h1>
+    <p class="dek">How NCAA women's basketball teams spent twelve seasons learning the right mix of twos and threes</p>
   </header>
 
   <main>
@@ -50,7 +51,23 @@
       </div>
     </section>
 
+    <section id="wins">
+      <h2>Why 1.5 pays off</h2>
+      <p>As shown below, every row is a season. In general teams closer to the 1.5 ratio tend to have a higher win rate than teams on either extreme.
+        That gives every team a reason to move toward a more balanced approach, and as the next charts show, they did.
+      </p>
+      <div class="legend">
+        <span><i class="sw win-bg"></i>Won more than half their games</span>
+        <span><i class="sw loss-bg"></i>Won less than half</span>
+      </div>
+      <div class="chart" id="wins-chart"></div>
+      <p class="caption">Average win % of the teams in each cell. Hover a cell for the number of teams.
+        Cells with fewer than 5 teams are left blank. In 2014–2016 the data covers only about 66 teams,
+        mostly stronger programs, so most cells in those years are above 50%.</p>
+    </section>
+
     <section id="convergence">
+      <h2>Twelve seasons of closing the gap</h2>
       <p>Each season's accuracy ratio for all of Division I. In 2014 threes were clearly
         underused; by 2026 the league sits almost exactly on 1.5. The season's ten best
         teams by win percentage got there first.</p>
@@ -84,20 +101,6 @@
       </div>
       <div class="chart" id="scatter"></div>
       <p class="caption" id="scatter-caption"></p>
-    </section>
-
-    <section id="wins">
-      <p>As shown below, every row is a season. In general teams closer to the 1.5 ratio tend to have a higher win rate than teams on either extreme. 
-        Which is why teams converged on the more balanced approach over time.
-      </p>
-      <div class="legend">
-        <span><i class="sw win-bg"></i>Won more than half their games</span>
-        <span><i class="sw loss-bg"></i>Won less than half</span>
-      </div>
-      <div class="chart" id="wins-chart"></div>
-      <p class="caption">Average win % of the teams in each cell. Hover a cell for the number of teams.
-        Cells with fewer than 5 teams are left blank. In 2014–2016 the data covers only about 66 teams,
-        mostly stronger programs, so most cells in those years are above 50%.</p>
     </section>
 
     <section id="next">
