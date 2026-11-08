@@ -5,15 +5,32 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Closing In on 1.5</title>
   <meta name="description" content="How NCAA women's basketball teams spent twelve seasons learning to balance twos and threes, 2014–2026.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100..125,600..800&family=Public+Sans:ital,wght@0,400..700;1,400&display=swap">
   <link rel="stylesheet" href="style.css">
   <script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
   <script type="module" src="main.js"></script>
 </head>
 <body>
   <header class="hero">
-    <p class="kicker">NCAA Division I women's basketball · 2014–2026</p>
-    <h1>Closing In on 1.5</h1>
-    <p class="dek">How NCAA women's basketball teams spent twelve seasons learning the right mix of twos and threes</p>
+    <svg class="court" viewBox="0 0 1200 640" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
+      <rect class="zone-three" x="-600" y="0" width="2400" height="640"/>
+      <path class="zone-two" d="M120,640 V600 A480,480 0 0 1 1080,600 V640 Z"/>
+      <path class="zone-two-tint" d="M120,640 V600 A480,480 0 0 1 1080,600 V640 Z"/>
+      <path class="mark" d="M560,640 V600 A40,40 0 0 1 640,600 V640"/>
+      <line class="mark" x1="566" y1="618" x2="634" y2="618"/>
+      <circle class="mark" cx="600" cy="600" r="10"/>
+      <path class="arc" d="M120,642 V600 A480,480 0 0 1 1080,600 V642"/>
+      <line class="mark" x1="-600" y1="638" x2="1800" y2="638"/>
+      <text class="zone-label two" x="490" y="540" text-anchor="middle">twos · inside the arc</text>
+      <text class="zone-label three" x="700" y="104" text-anchor="middle">threes · beyond it</text>
+    </svg>
+    <div class="hero-text">
+      <h1>Closing In on 1.5</h1>
+      <p class="dek">How playstyle's changed in NCAA women's basketball from 2014 to 2026</p>
+      <p class="hero-meta">NCAA Division I women's basketball · 2014–2026</p>
+    </div>
   </header>
 
   <main>
@@ -52,7 +69,7 @@
       </div>
     </section>
 
-    <section id="wins">
+    <section id="wins" class="wide">
       <h2>Why 1.5 pays off</h2>
       <p>As shown below, every column is a season, from 2014 on the left to 2026 on the right. In general teams closer to the 1.5 ratio tend to have a higher win rate than teams on either extreme.
         That gives every team a reason to move toward a more balanced approach, and as the next charts show, they did.
@@ -87,7 +104,7 @@
       <div class="chart" id="pps-chart"></div>
     </section>
 
-    <section id="teams">
+    <section id="teams" class="wide">
       <h2>Every team, every season</h2>
       <p>Each dot is a team. Teams <b>below the line</b> got more points from threes than
         from twos; teams <b>above</b> it got more from twos. Press play and watch the
@@ -115,7 +132,7 @@
         <li><b>Source:</b> the Love Data Week 2026 NCAA Women's Basketball data files
           (<code>team_box</code> table, one row per team per game).</li>
         <li><b>Seasons:</b> 2014–2026. Earlier seasons have too few games to use. The data covers
-          only about 66 teams per season in 2014–2016 and 348+ from 2017 on. The dotted line on each chart marks that change.</li>
+          only about 66 teams per season in 2014–2016 and 348+ from 2017 on. The dotted line on each chart marks that change. The original dataset goes from 2006-2026, the data before 2014 is too limited, with as low as only 10 games in 2013, so it's not included.</li>
         <li><b>Teams:</b> a team-season counts if the team played at least 20 games. 2-point and 3-point
           accuracy are totals across all of a team's games (total makes ÷ total attempts), not
           averages of per-game percentages.</li>
