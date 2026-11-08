@@ -1,62 +1,75 @@
+/* Court diagram world: a painted half court frames the page; the reading
+   column sits on a cool chalk ground. Blue = 2-point, orange = 3-point. */
 :root {
-  --bg: #fcfcfb;
+  --bg: #f4f6f9;
   --surface: #ffffff;
-  --ink: #0b0b0b;
-  --ink-2: #52514e;
-  --muted: #6e6c66;
-  --grid: #e9e8e2;
-  --axis: #c3c2b7;
+  --ink: #0f1a2e;
+  --ink-2: #3f4a5c;
+  --muted: #5d687a;
+  --grid: #e2e7ef;
+  --axis: #b7c0cd;
+  --line: #c9d2df;
+  --court: #13254a;
+  --court-paint: #1a3263;
+  --chalk: #f3f6fb;
   --two: #2a78d6;
-  --three: #eb6834;
-  --league: #1baf7a;
-  --top: #eda100;
+  --three: #e8642c;
+  --league: #1a9e6f;
+  --top: #d99400;
   --loss: #c4314b;
-  --dot: #8f8d86;
-  --heat-lo: #f1edf8;
-  --heat-hi: #4a2c8f;
-  --focus: #0b0b0b;
-  --font: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --dot: #8a93a3;
+  --heat-lo: #eef0f8;
+  --heat-hi: #3d2c8f;
+  --focus: #0f1a2e;
+  --font: "Public Sans", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-display: "Archivo", "Public Sans", system-ui, sans-serif;
   color-scheme: light;
 }
 
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --bg: #121211;
-    --surface: #1b1b1a;
-    --ink: #f2f1ec;
-    --ink-2: #bdbbb3;
-    --muted: #8a8880;
-    --grid: #2a2926;
-    --axis: #4a4943;
+    --bg: #0b1220;
+    --surface: #121b2d;
+    --ink: #eef2f8;
+    --ink-2: #b4bfd0;
+    --muted: #8794a8;
+    --grid: #1d2840;
+    --axis: #34425e;
+    --line: #2a3854;
+    --court: #102142;
+    --court-paint: #16305e;
     --two: #5b9cf0;
     --three: #f2814f;
     --league: #3cc895;
     --top: #f5b82e;
     --loss: #e5566f;
-    --dot: #77756e;
-    --heat-lo: #26222e;
+    --dot: #6f7b90;
+    --heat-lo: #1c1f33;
     --heat-hi: #c7b2f7;
-    --focus: #f2f1ec;
+    --focus: #eef2f8;
     color-scheme: dark;
   }
 }
 :root[data-theme="dark"] {
-  --bg: #121211;
-  --surface: #1b1b1a;
-  --ink: #f2f1ec;
-  --ink-2: #bdbbb3;
-  --muted: #8a8880;
-  --grid: #2a2926;
-  --axis: #4a4943;
+  --bg: #0b1220;
+  --surface: #121b2d;
+  --ink: #eef2f8;
+  --ink-2: #b4bfd0;
+  --muted: #8794a8;
+  --grid: #1d2840;
+  --axis: #34425e;
+  --line: #2a3854;
+  --court: #102142;
+  --court-paint: #16305e;
   --two: #5b9cf0;
   --three: #f2814f;
   --league: #3cc895;
   --top: #f5b82e;
   --loss: #e5566f;
-  --dot: #77756e;
-  --heat-lo: #26222e;
+  --dot: #6f7b90;
+  --heat-lo: #1c1f33;
   --heat-hi: #c7b2f7;
-  --focus: #f2f1ec;
+  --focus: #eef2f8;
   color-scheme: dark;
 }
 
@@ -69,28 +82,83 @@ body {
   margin: 0;
   background: var(--bg);
   color: var(--ink);
-  font: 17px/1.6 var(--font);
+  font: 17px/1.65 var(--font);
   -webkit-font-smoothing: antialiased;
 }
 
-.hero, main > section {
+/* ---- Hero: the half court ---- */
+.hero {
+  position: relative;
+  overflow: hidden;
+  background: var(--court);
+  color: var(--chalk);
+  height: clamp(500px, 52vw, 680px);
+  display: flex;
+  align-items: flex-end;
+}
+.court { position: absolute; inset: 0; width: 100%; height: 100%; }
+.court .zone-three { fill: var(--three); opacity: .1; }
+.court .zone-two { fill: var(--court-paint); }
+.court .zone-two-tint { fill: var(--two); opacity: .16; }
+.court .mark { fill: none; stroke: var(--chalk); stroke-width: 4; opacity: .8; }
+.court .arc { fill: none; stroke: var(--chalk); stroke-width: 6; }
+.court .zone-label {
+  font: 600 22px var(--font); letter-spacing: .02em;
+  paint-order: stroke; stroke: var(--court); stroke-width: 6px; stroke-linejoin: round;
+}
+.court .zone-label.two { fill: #9cc4f5; }
+.court .zone-label.three { fill: #f7ae88; }
+.hero-text {
+  position: relative;
+  width: 100%;
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 0 16px clamp(104px, 11vw, 170px);
+  text-align: center;
+}
+h1 {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-stretch: 118%;
+  font-size: clamp(46px, 6.8vw, 96px);
+  line-height: .98;
+  letter-spacing: -.01em;
+  margin: 0 0 14px;
+  text-wrap: balance;
+}
+.dek { font-size: clamp(18px, 2.2vw, 22px); line-height: 1.4; color: var(--chalk); opacity: .92; margin: 0 auto; max-width: 30em; text-wrap: balance; }
+.hero-meta { font-size: 15px; color: var(--chalk); opacity: .75; margin: 10px 0 0; }
+
+/* ---- Reading column and section rhythm ---- */
+main > section {
   max-width: 760px;
   margin: 0 auto;
   padding: 0 16px;
 }
-main > section.wide { max-width: 980px; }
-main > section { margin-top: 72px; }
-main > section.wide > p { max-width: 728px; }
-
-.hero { padding-top: 72px; }
-.kicker { color: var(--muted); font-size: 14px; letter-spacing: .04em; text-transform: uppercase; margin: 0; }
-h1 { font-size: clamp(44px, 9vw, 76px); line-height: 1; margin: 8px 0 12px; letter-spacing: -.02em; }
-.dek { font-size: 22px; line-height: 1.4; color: var(--ink-2); margin: 0; }
-h2 {font-size: 26px; line-height: 1.25; margin: 0 0 12px; letter-spacing: -.01em; }
+main > section.wide { max-width: 1000px; }
+main > section:first-child { padding-top: 56px; }
+main > section + section { margin-top: 72px; }
+main > section + section::before {
+  /* a thin court line between sections */
+  content: ""; display: block; height: 2px; background: var(--line); margin-bottom: 56px;
+}
+main p { max-width: 68ch; }
+main > section.wide > p, main > section.wide > .legend, main > section.wide > .caption { margin-left: auto; margin-right: auto; max-width: 728px; }
+main > section.wide > h2, main > section.wide > .controls { max-width: 728px; margin-left: auto; margin-right: auto; }
+h2 {
+  font-family: var(--font-display);
+  font-weight: 750;
+  font-stretch: 112%;
+  font-size: clamp(25px, 3vw, 31px);
+  line-height: 1.15;
+  letter-spacing: -.005em;
+  margin: 0 0 14px;
+  text-wrap: balance;
+}
 b.two, .two { color: var(--two); }
 b.three, .three { color: var(--three); }
 
-.card { background: var(--surface); border: 1px solid var(--grid); border-radius: 12px; padding: 20px; }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 20px; }
 .sliders { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
 .sliders label { display: flex; flex-wrap: wrap; justify-content: space-between; font-weight: 600; }
 .sliders output { font-variant-numeric: tabular-nums; }
@@ -182,7 +250,7 @@ button:hover { border-color: var(--ink-2); }
   body { font-size: 16px; }
   .sliders, .small-multiples { grid-template-columns: 1fr; }
   .pps-row { grid-template-columns: 120px 1fr 44px; font-size: 13px; }
-  main > section { margin-top: 56px; }
+  main > section + section { margin-top: 56px; }
 }
 
 .heat-scale { display: inline-flex; align-items: center; gap: 8px; font-variant-numeric: tabular-nums; }
