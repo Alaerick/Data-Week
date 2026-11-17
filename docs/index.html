@@ -10,6 +10,9 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100..125,600..800&family=Public+Sans:ital,wght@0,400..700;1,400&display=swap">
   <link rel="stylesheet" href="style.css">
   <script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
+  <script type="importmap">
+  { "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js" } }
+  </script>
   <script type="module" src="main.js"></script>
 </head>
 <body>
@@ -23,9 +26,8 @@
       <circle class="mark" cx="600" cy="600" r="10"/>
       <path class="arc" d="M120,642 V600 A480,480 0 0 1 1080,600 V642"/>
       <line class="mark" x1="-600" y1="638" x2="1800" y2="638"/>
-      <text class="zone-label two" x="490" y="540" text-anchor="middle">twos · inside the arc</text>
-      <text class="zone-label three" x="700" y="104" text-anchor="middle">threes · beyond it</text>
     </svg>
+    <div class="hero-stage"></div>
     <div class="hero-text">
       <h1>Closing In on 1.5</h1>
       <p class="dek">How playstyle's changed in NCAA women's basketball from 2014 to 2026</p>
@@ -141,6 +143,10 @@
           and and-ones (more common on twos), offensive rebounds after misses, and shot-clock
           situations, so the true break-even point for a given team may be a little above or
           below 1.5.</li>
+        <li><b>Header animation:</b> every made shot of the 2025–26 season (285,834, free throws
+          excluded) from the <code>play_by_play</code> table, released in game-date order from its
+          recorded court location. Blue is a 2-pointer, orange a 3-pointer. The flight paths are drawn
+          arcs, not tracked ball paths.</li>
         <li><b>Code:</b> <code>scripts/export_data.py</code> builds the JSON in
           <code>docs/data/</code>. The charts use D3.</li>
       </ul>

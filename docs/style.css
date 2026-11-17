@@ -92,28 +92,33 @@ body {
   overflow: hidden;
   background: var(--court);
   color: var(--chalk);
-  height: clamp(500px, 52vw, 680px);
-  display: flex;
-  align-items: flex-end;
+  height: clamp(560px, 60vw, 780px);
 }
+/* Flat court drawing: shown until the 3D shot animation is ready, and kept
+   when WebGL or the shot data is unavailable. */
 .court { position: absolute; inset: 0; width: 100%; height: 100%; }
 .court .zone-three { fill: var(--three); opacity: .1; }
 .court .zone-two { fill: var(--court-paint); }
 .court .zone-two-tint { fill: var(--two); opacity: .16; }
 .court .mark { fill: none; stroke: var(--chalk); stroke-width: 4; opacity: .8; }
 .court .arc { fill: none; stroke: var(--chalk); stroke-width: 6; }
-.court .zone-label {
-  font: 600 22px var(--font); letter-spacing: .02em;
-  paint-order: stroke; stroke: var(--court); stroke-width: 6px; stroke-linejoin: round;
+.hero-stage { position: absolute; inset: 0; opacity: 0; transition: opacity .9s ease-out; pointer-events: none; }
+.hero-stage canvas { display: block; width: 100% !important; height: 100% !important; }
+.hero.has-shots .hero-stage { opacity: 1; }
+.court { transition: opacity .9s ease-out; }
+.hero.has-shots .court { opacity: 0; }
+.hero::after {
+  /* keeps the title readable where shot arcs cross behind it */
+  content: ""; position: absolute; inset: 0 0 45% 0; pointer-events: none;
+  background: linear-gradient(to bottom, var(--court) 0%, color-mix(in srgb, var(--court) 78%, transparent) 55%, transparent 100%);
 }
-.court .zone-label.two { fill: #9cc4f5; }
-.court .zone-label.three { fill: #f7ae88; }
 .hero-text {
   position: relative;
+  z-index: 1;
   width: 100%;
-  max-width: 760px;
+  max-width: 900px;
   margin: 0 auto;
-  padding: 0 16px clamp(104px, 11vw, 170px);
+  padding: clamp(36px, 5vw, 64px) 16px 0;
   text-align: center;
 }
 h1 {
@@ -248,6 +253,7 @@ button:hover { border-color: var(--ink-2); }
 
 @media (max-width: 640px) {
   body { font-size: 16px; }
+  .hero { height: 480px; }
   .sliders, .small-multiples { grid-template-columns: 1fr; }
   .pps-row { grid-template-columns: 120px 1fr 44px; font-size: 13px; }
   main > section + section { margin-top: 56px; }

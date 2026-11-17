@@ -509,3 +509,13 @@ for (const [id, label] of Object.entries(chartSummaries)) {
 }
 d3.select("#verdict").attr("aria-live", "polite");
 d3.select("#scatter-caption").attr("aria-live", "polite");
+
+// ------------------------------------------------------------------- hero --
+
+// Every made shot of 2025-26 flying to the basket. Decorative: if WebGL, three.js
+// or the shot data is unavailable, the flat court drawing simply stays.
+const heroEl = document.querySelector(".hero");
+import("./hero-shots.js")
+  .then((m) => m.mountHeroShots(heroEl.querySelector(".hero-stage"), "data/made_shots_2026.json"))
+  .then(() => heroEl.classList.add("has-shots"))
+  .catch(() => {});
